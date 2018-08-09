@@ -8,15 +8,10 @@
 [img4]: ./writeup-images/color-gradient-final.png "Road Transformed"
 [img5]: ./writeup-images/bird-eye-view.png "Road Transformed"
 [img6]: ./writeup-images/histogram.png "Road Transformed"
+[img7]: ./writeup-images/vid-2.png "Road Transformed"
+[img8]: ./writeup-images/formula.png "Road Transformed"
+[img9]: ./writeup-images/advance-lane-finding-small.gif
 
-
-
-
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
 
 
 ### Camera Calibration
@@ -65,7 +60,7 @@ used a combination of color and gradient thresholds to generate a binary image
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
 - code in the same [notebook](https://github.com/BingbingLai/carnd-project-4/blob/master/projects/advanced-lane-finding-project.ipynb),section: "Perspective Transform"
-- The code for my perspective transform:
+- also code pasted below for perspective transforming:
 
 
 ```
@@ -146,7 +141,7 @@ code in section "Lane Line Detection"; used the rough steps below:
 
 - get mid point
 - find left peak points and right peak points
-- apply nonzero
+- apply nonpzero
 - find the left good indexes and right good indexes
 - fit second polynomial
 
@@ -155,13 +150,23 @@ code in section "Lane Line Detection"; used the rough steps below:
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+
+did [this](https://github.com/BingbingLai/carnd-project-4/blob/master/projects/advanced-lane-finding-project.ipynb) in function: `curvature`, used the formula below:
+
+![alt text][img8]
+
+- evaluated the y value corresponding to the bottom of the warped binary image
+- located the lane line pixels, used their x and y pixel positions to fit a second order polynomial curve
+- scaled x and y respectively (in meters/pixel): 
+
+
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+implemented this step in function: `draw_back_original.py`. Here is an test image:
 
-![alt text][image6]
+
+![alt text][img7]
 
 ---
 
@@ -169,12 +174,40 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+![alt text][img9]
+
+Here's a [link to my video result](https://github.com/BingbingLai/carnd-project-4/blob/master/projects/road.mp4)
 
 ---
 
-### Discussion
+### Chanllenges
 
-#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+
+#### time consuming on making binary warp image
+- tried multiple functions and tune different parameters 
+- took me a lot of time finding a good combination for a binary image. 
+- spent much time choosing among different methods: magnitute, HLS, RGB channels, Gradient Threshold etc.
+- picked final combination which combine S binary and x, y sobel
+
+
+#### chanllenging on calulating curvature
+
+- not sure whether the calculation was accurate
+- because, certain radiuses appear to be more than 1000 (m)
+
+
+#### pipeline
+- can only came up with one check: whether two lane lines have similar slope.
+
+
+### could be improved:
+
+the following could be used to improved:
+
+- could find more sanity checks to deal with more complex situations, also
+- could use more videos to test corner cases
+- tried different source points and destination points in "Perspective Transform"
+- find a better binary warp combination
+
+
